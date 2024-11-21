@@ -1,13 +1,13 @@
 {
-  "name": "test",
+  "name": "test-task",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "lint": "ng lint"
+    "start": "nx serve",
+    "build": "nx build",
+    "watch": "nx build --watch --configuration development",
+    "test": "nx test",
+    "lint": "nx lint"
   },
   "private": true,
   "dependencies": {
@@ -30,8 +30,13 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.11",
+    "@angular-devkit/core": "^18.2.11",
+    "@angular-devkit/schematics": "^18.2.11",
     "@angular/cli": "^18.2.11",
     "@angular/compiler-cli": "^18.2.0",
+    "@nx/angular": "20.1.2",
+    "@nx/workspace": "20.1.2",
+    "@schematics/angular": "^18.2.11",
     "@tailwindcss/typography": "^0.5.15",
     "@types/jasmine": "~5.1.0",
     "@types/lodash-es": "^4.17.12",
@@ -49,10 +54,12 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "nx": "20.1.2",
     "prettier": "^3.3.3",
     "prettier-eslint": "^16.3.0",
     "type-fest": "^4.26.1",
     "typescript": "~5.5.2",
     "typescript-eslint": "8.10.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
