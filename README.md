@@ -1,27 +1,97 @@
-# Books Listing
+# Book Library Management System
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.11.
+A modern Angular application for managing a book library, built with Angular 18, NgRx for state management, Angular Material for UI components, and TailwindCSS for styling.
 
-## Development server
+## Features
 
-Run `yarn serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Browse and search book collection
+- View detailed book information
+- Add, edit, and delete books
+- Responsive material design interface
+- State management with NgRx
+- Animations and transitions
 
-## Code scaffolding
+## Tech Stack
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Angular 18.2
+- NgRx 18.1
+- Angular Material 18.2
+- TailwindCSS
+- RxJS 7.8
+- Luxon for date handling
+- ESLint + Prettier for code quality
+- NX for build and development tools
 
-## Build
+## Getting Started
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Prerequisites
 
-## Running unit tests
+- Node.js (latest LTS version)
+- Yarn 1.22+
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Installation
 
-## Running end-to-end tests
+```bash
+git clone [repository-url]
+cd [project-directory]
+yarn install
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Development Server
 
-## Further help
+```bash
+yarn serve
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
+### Building for Production
+
+```bash
+yarn build
+```
+
+The build artifacts will be stored in the `dist/` directory.
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── components/
+│   ├── models/
+│   ├── services/
+│   ├── store/
+│   │   ├── actions/
+│   │   ├── effects/
+│   │   ├── reducers/
+│   │   └── selectors/
+│   └── routes/
+├── assets/
+└── styles/
+```
+
+## Available Scripts
+
+- `yarn serve`: Start development server
+- `yarn build`: Build production version
+- `yarn test`: Run unit tests
+- `yarn lint`: Run linting checks
+
+## Contributing
+
+1. Create a feature branch from `main`
+2. Commit your changes following conventional commits
+3. Push your branch and open a pull request
+
+## Agenda
+
+- Books CRUD
+- Follows Angular style guide
+- Uses TailwindCSS utilities for styling
+- Implements strict TypeScript checks
+- Wrote base unit tests
+
+## License
+
+MIT
