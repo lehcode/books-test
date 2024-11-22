@@ -3,10 +3,15 @@ import { Routes } from '@angular/router'
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./pages/home/home.page'),
+    loadComponent: () => import('./components/pages/home/home.page'),
   },
   {
-    path: 'other',
-    loadComponent: () => import('./pages/other/other.page'),
+    path: 'books',
+    loadChildren: () => import('./routes/books.routes').then(m => m.BOOK_ROUTES)
   },
+  {
+    path: '**',
+    loadComponent: () => import('./components/not-found/not-found.component')
+      .then(m => m.NotFoundComponent)
+  }
 ]
