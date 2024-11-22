@@ -1,0 +1,65 @@
+<div class="flex justify-between items-center mb-4">
+  <h1 class="text-2xl font-bold">{{ title }}</h1>
+  <button mat-flat-button color="primary" (click)="openAddBookDialog()">
+    <mat-icon>add</mat-icon>
+    Add Book
+  </button>
+</div>
+
+<div class="container mx-auto">
+  <!-- Loading State -->
+  <div *ngIf="loading$ | async" class="flex justify-center p-4">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error$ | async as error" class="text-red-600 p-4">
+    {{ error }}
+  </div>
+
+  <!-- Data Table -->
+  <mat-table
+    *ngIf="!(loading$ | async) && (books$ | async)?.length"
+    [dataSource]="(books$ | async) ?? []"
+    @fadeInOut
+  >
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+      <mat-cell *matCellDef="let book">{{ book.title }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="author">
+      <mat-header-cell *matHeaderCellDef>Author</mat-header-cell>
+      <mat-cell *matCellDef="let book"> {{ book.author.firstName }} {{ book.author.lastName }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="published">
+      <mat-header-cell *matHeaderCellDef>Year</mat-header-cell>
+      <mat-cell *matCellDef="let book">{{ book.published }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell *matCellDef="let book">
+        <button mat-icon-button (click)="openDetails(book)" matTooltip="View Details">
+          <mat-icon>info</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" (click)="openEditDialog(book)" matTooltip="Edit Book">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="openDeleteDialog(book)" matTooltip="Delete Book">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns" class="hover:bg-gray-100 cursor-pointer" @fadeInOut>
+    </mat-row>
+  </mat-table>
+
+  <!-- Empty State -->
+  <div *ngIf="!(loading$ | async) && (books$ | async)?.length === 0" class="text-center p-8" @fadeInOut>
+    No books found.
+  </div>
+</div>

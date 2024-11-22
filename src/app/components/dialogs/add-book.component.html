@@ -1,0 +1,67 @@
+<form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+  <h2 mat-dialog-title>{{ isEditing ? 'Edit Book' : 'Add New Book' }}</h2>
+
+  <mat-dialog-content>
+    <div class="flex flex-col gap-4 min-w-[400px] p-4">
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" placeholder="Enter book title">
+        <mat-error *ngIf="bookForm.get('title')?.errors?.['required']">
+          Title is required
+        </mat-error>
+      </mat-form-field>
+
+      <div class="flex gap-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Author First Name</mat-label>
+          <input matInput formControlName="authorFirstName" placeholder="Enter author's first name">
+          <mat-error *ngIf="bookForm.get('authorFirstName')?.errors?.['required']">
+            First name is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Author Last Name</mat-label>
+          <input matInput formControlName="authorLastName" placeholder="Enter author's last name">
+          <mat-error *ngIf="bookForm.get('authorLastName')?.errors?.['required']">
+            Last name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Publication Year</mat-label>
+        <input matInput type="number" formControlName="published" placeholder="Enter publication year">
+        <mat-error *ngIf="bookForm.get('published')?.errors?.['required']">
+          Publication year is required
+        </mat-error>
+        <mat-error *ngIf="bookForm.get('published')?.errors?.['min'] || bookForm.get('published')?.errors?.['max']">
+          Please enter a valid year between 1000 and {{ currentYear }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" placeholder="Enter book description" rows="3"></textarea>
+        <mat-error *ngIf="bookForm.get('description')?.errors?.['required']">
+          Description is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Cover URL</mat-label>
+        <input matInput formControlName="cover" placeholder="Enter cover image URL">
+        <mat-error *ngIf="bookForm.get('cover')?.errors?.['required']">
+          Cover URL is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [mat-dialog-close]="false">Cancel</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="bookForm.invalid">
+      {{ isEditing ? 'Update' : 'Add' }}
+    </button>
+  </mat-dialog-actions>
+</form>

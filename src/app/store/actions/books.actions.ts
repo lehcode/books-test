@@ -28,4 +28,36 @@ export const deleteBookFailure = createAction(
   props<{ error: string }>()
 );
 
+// Add new book
+export const addBook = createAction(
+  '[Books] Add Book',
+  props<{ book: Omit<Book, 'id'> }>()
+);
+export const addBookSuccess = createAction(
+  '[Books] Add Book Success',
+  props<{ book: Book }>()
+);
+export const addBookFailure = createAction(
+  '[Books] Add Book Failure',
+  props<{ error: string }>()
+);
 
+// Update book
+export const updateBook = createAction(
+  '[Books] Update Book',
+  props<{ book: Book }>()
+);
+export const updateBookSuccess = createAction(
+  '[Books] Update Book Success',
+  props<{ book: Book }>()
+);
+export const updateBookFailure = createAction(
+  '[Books] Update Book Failure',
+  props<{ error: string }>()
+);
+
+// Search fo books
+export const setSearchQuery = createAction(
+  '[Books] Set Search Query',
+  props<{ query: string }>()
+);

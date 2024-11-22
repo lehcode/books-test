@@ -1,47 +1,76 @@
 import { createReducer, on } from '@ngrx/store'
 import { Book } from '../../models/book.interface'
-import {
-  deleteBook,
-  deleteBookFailure,
-  deleteBookSuccess,
-  loadBooks,
-  loadBooksSuccess
-} from '../actions/books.actions'
+import * as BookActions from '../actions/books.actions'
 
 export interface IBooksState {
-  books: Book[];
-  loading: boolean;
-  error: string | null;
-  searchQuery: any
+  books: Book[]
+  loading: boolean
+  error: string | null
+  searchQuery: string | null
 }
 
 const initialState: IBooksState = {
   books: [],
   loading: false,
   error: null,
-  searchQuery: null
-};
+  searchQuery: null,
+}
 
 export const bookReducer = createReducer(
   initialState,
-  on(loadBooks, (state) => ({ ...state, loading: true })),
-  on(loadBooksSuccess, (state, { books }) => ({
+  // Load books
+  on(BookActions.loadBooks, (state) => ({
+    ...state,
+    loading: true,
+    error: null
+  })),
+
+  on(BookActions.loadBooksSuccess, (state, { books }) => ({
     ...state,
     books,
-    loading: false
+    loading: false,
+    error: null
   })),
-  on(deleteBook, (state) => ({
+
+  on(BookActions.loadBooksFailure, (state, { error }) => ({
     ...state,
-    loading: true
+    loading: false,
+    error
   })),
-  on(deleteBookSuccess, (state, { id }) => ({
+
+  // Delete book
+  on(BookActions.deleteBookSuccess, (state, { id }) => ({
     ...state,
-    books: state.books.filter(book => book.id !== id),
-    loading: false
+    books: state.books.filter((book) => book.id !== id),
+    error: null
   })),
-  on(deleteBookFailure, (state, { error }) => ({
+
+  on(BookActions.deleteBookFailure, (state, { error }) => ({
     ...state,
-    error,
-    loading: false
-  }))
-);
+    error
+  })),
+
+  // Add book
+  on(BookActions.addBookSuccess, (state, { book }) => ({
+    ...state,
+    books: [...state.books, book],
+    error: null
+  })),
+
+  on(BookActions.addBookFailure, (state, { error }) => ({
+    ...state,
+    error
+  })),
+
+  // Update book
+  on(BookActions.updateBookSuccess, (state, { book }) => ({
+    ...state,
+    books: state.books.map((b) => (b.id === book.id ? book : b)),
+    error: null
+  })),
+
+  on(BookActions.updateBookFailure, (state, { error }) => ({
+    ...state,
+    error
+  })),
+)
