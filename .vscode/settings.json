@@ -4,13 +4,18 @@
   "editor.formatOnSave": false,
   "eslint.format.enable": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.stylelint": "explicit",
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.prettier": "always",
+    "source.sortImports": "explicit",
+    "source.organizeImports": "explicit",
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "scss.lint.unknownAtRules": "ignore",
   "eslint.validate": ["json"],
-  "angular.enable-strict-mode-prompt": false
+  "angular.enable-strict-mode-prompt": false,
+  "DockerRun.DisableAutoGenerateConfig": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
