@@ -13,6 +13,7 @@ import { selectBooks, selectBooksError, selectBooksLoading } from '../../store/s
 import { BookDetailsComponent } from '../book-details/book-details.component'
 import { BookFormComponent } from '../dialogs/add-book.component'
 import { DeleteBookDialogComponent } from '../dialogs/delete-book.component'
+import { FabMenuComponent } from '../nav/fab-menu.component'
 
 @Component({
   selector: 'app-book-list',
@@ -23,9 +24,11 @@ import { DeleteBookDialogComponent } from '../dialogs/delete-book.component'
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    FabMenuComponent,
   ],
   templateUrl: './book-list.component.html',
+  styleUrls: ['./book-list.component.css'],
   animations: [fadeInOut],
 })
 export class BookListComponent {
@@ -33,8 +36,9 @@ export class BookListComponent {
   loading$ = this.store.select(selectBooksLoading)
   error$ = this.store.select(selectBooksError)
 
-  displayedColumns = ['title', 'author', 'published', 'actions']
-  title = 'Book List'
+  displayedColumns = ['title', 'author', 'published', 'info'];
+  title = 'Library'
+  selectedBook: Book | null = null
 
   constructor(
     private store: Store,
@@ -43,36 +47,40 @@ export class BookListComponent {
     this.store.dispatch(loadBooks())
   }
 
+  selectBook(book: Book): void {
+    this.selectedBook = this.selectedBook?.id === book.id ? null : book
+  }
+
   openAddBookDialog(): void {
     const dialogRef = this.dialog.open(BookFormComponent, {
       width: '500px',
-      disableClose: true
-    });
+      disableClose: true,
+    })
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // Refresh the book list
-        this.store.dispatch(loadBooks());
+        this.store.dispatch(loadBooks())
       }
-    });
+    })
   }
 
   openEditDialog(book: Book): void {
     const dialogRef = this.dialog.open(BookFormComponent, {
       width: '500px',
       data: { book },
-      disableClose: true
-    });
+      disableClose: true,
+    })
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // Refresh the book list
-        this.store.dispatch(loadBooks());
+        this.store.dispatch(loadBooks())
+        this.selectedBook = null
       }
-    });
+    })
   }
 
-  openDetails(book: Book): void {
+  openDetails(book: Book, event: Event): void {
+    event.stopPropagation()
     this.dialog.open(BookDetailsComponent, {
       data: { book },
       width: '500px',
@@ -83,12 +91,13 @@ export class BookListComponent {
     const dialogRef = this.dialog.open(DeleteBookDialogComponent, {
       data: { book },
       width: '400px',
-    });
+    })
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.store.dispatch(deleteBook({ id: book.id }));
+        this.store.dispatch(deleteBook({ id: book.id }))
+        this.selectedBook = null
       }
-    });
+    })
   }
 }
