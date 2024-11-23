@@ -7,7 +7,7 @@
     "start": "nx serve",
     "prebuild": "nx",
     "build": "nx build --configuration production",
-    "build-cf": "nx build --configuration production && cp dist/test-task/browser/* dist/cloudflare/",
+    "build-cf": "nx build --configuration production",
     "watch": "nx build --watch --configuration development",
     "test": "nx test --configuration production --coverage",
     "lint": "nx lint"
