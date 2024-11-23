@@ -9,7 +9,7 @@
     "build": "nx build --configuration production",
     "build-cf": "nx build --configuration production && cp dist/test-task/browser/* dist/cloudflare/",
     "watch": "nx build --watch --configuration development",
-    "test": "nx test",
+    "test": "nx test --configuration production --coverage",
     "lint": "nx lint"
   },
   "private": true,
