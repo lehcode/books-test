@@ -5,7 +5,7 @@
     "ng": "ng",
     "nx": "nx",
     "start": "nx serve",
-    "prebuild": "nx",
+    "prebuild": "nx reset",
     "build": "nx build --configuration production",
     "build-cf": "nx build --configuration production",
     "watch": "nx build --watch --configuration development",
