@@ -11,7 +11,7 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Accept',
-    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval';",
+    'Content-Security-Policy': "default-src 'self' 'unsafe-eval'; img-src *; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;",
     'Cross-Origin-Resource-Policy': 'cross-origin',
     'Cross-Origin-Embedder-Policy': 'require-corp',
     'Cross-Origin-Opener-Policy': 'same-origin',
