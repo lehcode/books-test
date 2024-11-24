@@ -9,9 +9,12 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
 
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Content-Type': 'application/json',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Accept',
+    // 'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval';",
+    'Cross-Origin-Resource-Policy': 'cross-origin',
+    'Cross-Origin-Embedder-Policy': 'require-corp',
+    'Cross-Origin-Opener-Policy': 'same-origin',
     'Access-Control-Allow-Credentials': 'true',
   }
 
@@ -28,13 +31,13 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
         error: 'Storage service is not available',
         debug: {
           env: JSON.stringify(env),
-          kvExists: !!env?.BOOKS_KV
-        }
+          kvExists: !!env?.BOOKS_KV,
+        },
       }),
       {
         status: 500,
-        headers: corsHeaders
-      }
+        headers: corsHeaders,
+      },
     )
   }
 
@@ -46,36 +49,43 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
     switch (request.method) {
       case 'GET': {
         try {
+          console.time('GetBooks')
+
           const booksJson = await env.BOOKS_KV.get('books')
+
+          console.time('GetBooks Completed')
+          console.log(booksJson)
+
           if (!booksJson) {
             // If no books exist, initialize with empty array
             await env.BOOKS_KV.put('books', '[]')
             return new Response('[]', { headers: corsHeaders })
           }
+
           return new Response(booksJson, { headers: corsHeaders })
         } catch (kvError) {
           console.error('KV operation failed:', kvError)
           return new Response(
             JSON.stringify({
               error: 'Failed to retrieve books',
-              details: kvError.message
+              details: kvError.message,
             }),
             {
               status: 500,
-              headers: corsHeaders
-            }
+              headers: corsHeaders,
+            },
           )
         }
       }
 
       case 'POST': {
-        const newBook = await request.json()
+        const newBook: object = await request.json()
         const booksJson = await env.BOOKS_KV.get('books')
         const books = booksJson ? JSON.parse(booksJson) : []
 
         const bookWithId = {
           ...newBook,
-          id: Date.now()
+          id: Date.now(),
         }
 
         books.push(bookWithId)
@@ -83,7 +93,7 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
 
         return new Response(JSON.stringify(bookWithId), {
           status: 201,
-          headers: corsHeaders
+          headers: corsHeaders,
         })
       }
 
@@ -92,19 +102,19 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
           return new Response('Book ID required', { status: 400, headers: corsHeaders })
         }
 
-        const bookToUpdate = await request.json()
+        const bookToUpdate: object = await request.json()
         const booksJson = await env.BOOKS_KV.get('books')
         const books = booksJson ? JSON.parse(booksJson) : []
 
         const updatedBooks = books.map((book: any) =>
-          book.id === parseInt(id) ? { ...bookToUpdate, id: parseInt(id) } : book
+          book.id === parseInt(id) ? { ...bookToUpdate, id: parseInt(id) } : book,
         )
 
         await env.BOOKS_KV.put('books', JSON.stringify(updatedBooks))
 
         return new Response(JSON.stringify(bookToUpdate), {
           status: 200,
-          headers: corsHeaders
+          headers: corsHeaders,
         })
       }
 
@@ -121,14 +131,14 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
 
         return new Response(null, {
           status: 204,
-          headers: corsHeaders
+          headers: corsHeaders,
         })
       }
 
       default:
         return new Response('Method not allowed', {
           status: 405,
-          headers: corsHeaders
+          headers: corsHeaders,
         })
     }
   } catch (error: any) {
@@ -137,12 +147,12 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
       JSON.stringify({
         error: 'Internal server error',
         details: error.message,
-        stack: error.stack
+        stack: error.stack,
       }),
       {
         status: 500,
-        headers: corsHeaders
-      }
+        headers: corsHeaders,
+      },
     )
   }
 }
