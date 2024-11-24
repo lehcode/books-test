@@ -1,3 +1,5 @@
+import { KVNamespace } from '@cloudflare/workers-types'
+
 import { MOCK_BOOKS } from '../../src/mocks/book-mocks'
 
 /**

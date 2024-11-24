@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatTableModule } from '@angular/material/table'
 import { Store } from '@ngrx/store'
+
 import { fadeInOut } from '../../animations/fade-in-out'
 import { Book } from '../../models/book.interface'
 import { deleteBook, loadBooks } from '../../store/actions/books.actions'
