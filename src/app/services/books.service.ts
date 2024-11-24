@@ -3,14 +3,15 @@ import { Injectable } from "@angular/core"
 import { Observable, throwError } from "rxjs"
 import { catchError } from "rxjs/operators"
 
-import { environment } from "../../environments/environment"
 import { Book } from "../models/book.interface"
+
+const apiUrl = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:8788/api'
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookService {
-  private apiUrl = `${environment.apiUrl}/books`
+  private apiUrl = `${apiUrl}/books`
 
   constructor(private http: HttpClient) {}
 
