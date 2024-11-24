@@ -49,15 +49,9 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
     switch (request.method) {
       case 'GET': {
         try {
-          console.time('GetBooks')
-
           const booksJson = await env.BOOKS_KV.get('books')
 
-          console.time('GetBooks Completed')
-          console.log(booksJson)
-
           if (!booksJson) {
-            // If no books exist, initialize with empty array
             await env.BOOKS_KV.put('books', '[]')
             return new Response('[]', { headers: corsHeaders })
           }

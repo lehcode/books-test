@@ -9,7 +9,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools'
 import { routes } from './app.routes'
 import { provideMaterialConfig } from './material.provider'
 import { BooksEffects } from './store/effects/books.effects'
-import { bookReducer } from './store/reducers/books.reducers'
+import { bookReducer } from './store/reducers/books.reducer'
 
 export const appConfig: ApplicationConfig = {
   providers: [

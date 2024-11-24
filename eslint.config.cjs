@@ -58,6 +58,8 @@ module.exports = tseslint.config(
       'unused-imports/no-unused-imports': 'warn',
       '@typescript-eslint/no-unused-expressions': 'off',
       '@typescript-eslint/no-empty-function': 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn'
     },
   },
   {
