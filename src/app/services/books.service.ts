@@ -1,13 +1,14 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { Observable } from "rxjs"
+import { environment } from "../../environments/environment"
 import { Book } from "../models/book.interface"
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookService {
-  private apiUrl: string = '/api/books'
+  private apiUrl: string = `${environment.apiUrl}/books`
 
   constructor(private http: HttpClient) {}
 

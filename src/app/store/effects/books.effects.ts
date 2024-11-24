@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { of } from 'rxjs'
 import { catchError, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators'
-import { MOCK_BOOKS } from '../../../mocks/books-mocks'
+import { MOCK_BOOKS } from '../../../mocks/book-mocks'
 import * as BookActions from '../actions/books.actions'
 import { selectBooks } from '../selectors/books.selectors'
 
