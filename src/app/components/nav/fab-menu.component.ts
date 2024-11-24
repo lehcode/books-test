@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon'
+
 import { Book } from '../../models/book.interface'
 
 @Component({
@@ -14,17 +15,17 @@ import { Book } from '../../models/book.interface'
       <!-- Action buttons, shown when book is selected -->
       @if (selectedBook) {
         <div class="flex flex-col gap-2" @fadeInOut>
-          <button mat-mini-fab color="warn" (click)="onDelete.emit(selectedBook)">
+          <button mat-mini-fab color="warn" (click)="deleteBookEvent.emit(selectedBook)">
             <mat-icon>delete</mat-icon>
           </button>
-          <button mat-mini-fab color="primary" (click)="onEdit.emit(selectedBook)">
+          <button mat-mini-fab color="primary" (click)="editBookEvent.emit(selectedBook)">
             <mat-icon>edit</mat-icon>
           </button>
         </div>
       }
 
       <!-- Main FAB button -->
-      <button mat-fab color="primary" (click)="onAdd.emit()">
+      <button mat-fab color="primary" (click)="addBookEvent.emit()">
         <mat-icon>add</mat-icon>
       </button>
     </div>
@@ -43,7 +44,7 @@ import { Book } from '../../models/book.interface'
 })
 export class FabMenuComponent {
   @Input() selectedBook: Book | null = null;
-  @Output() onAdd = new EventEmitter<void>();
-  @Output() onEdit = new EventEmitter<Book>();
-  @Output() onDelete = new EventEmitter<Book>();
+  @Output() addBookEvent = new EventEmitter<void>();
+  @Output() editBookEvent = new EventEmitter<Book>();
+  @Output() deleteBookEvent = new EventEmitter<Book>();
 }

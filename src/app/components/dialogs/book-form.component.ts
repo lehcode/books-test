@@ -6,6 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatInputModule } from '@angular/material/input'
 import { Store } from '@ngrx/store'
+
 import { Book } from '../../models/book.interface'
 import { addBook, updateBook } from '../../store/actions/books.actions'
 
@@ -13,11 +14,11 @@ import { addBook, updateBook } from '../../store/actions/books.actions'
   selector: 'app-book-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatButtonModule, MatFormFieldModule, MatInputModule],
-  templateUrl: './add-book.component.html',
+  templateUrl: './book-form.component.html',
 })
 export class BookFormComponent implements OnInit {
   bookForm: FormGroup
-  isEditing: boolean = false
+  isEditing = false
   currentYear = new Date().getFullYear()
   book = {} as Book
 

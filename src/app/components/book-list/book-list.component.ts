@@ -13,7 +13,7 @@ import { deleteBook, loadBooks } from '../../store/actions/books.actions'
 import { selectBooksError, selectBooksLoading, selectFilteredBooks } from '../../store/selectors/books.selectors'
 import { BookDetailsComponent } from '../book-details/book-details.component'
 import { BookSearchComponent } from '../book-search/book-search.component'
-import { BookFormComponent } from '../dialogs/add-book.component'
+import { BookFormComponent } from '../dialogs/book-form.component'
 import { DeleteBookDialogComponent } from '../dialogs/delete-book.component'
 import { FabMenuComponent } from '../nav/fab-menu.component'
 
@@ -99,9 +99,9 @@ import { FabMenuComponent } from '../nav/fab-menu.component'
       <!-- FAB Menu -->
       <app-fab-menu
         [selectedBook]="selectedBook"
-        (onAdd)="openAddBookDialog()"
-        (onEdit)="openEditDialog($event)"
-        (onDelete)="openDeleteDialog($event)"
+        (addBookEvent)="openAddBookDialog()"
+        (editBookEvent)="openEditDialog($event)"
+        (deleteBookEvent)="openDeleteDialog($event)"
       ></app-fab-menu>
     </div>
   `,
