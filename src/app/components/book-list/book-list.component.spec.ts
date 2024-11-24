@@ -5,6 +5,7 @@ import { MatDialogModule } from '@angular/material/dialog'
 import { MatIconModule } from '@angular/material/icon'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatTableModule } from '@angular/material/table'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { provideStore } from '@ngrx/store'
 
 import { bookReducer } from '../../store/reducers/books.reducer'
@@ -24,7 +25,8 @@ describe('BookListComponent', () => {
         MatIconModule,
         MatProgressSpinnerModule,
         MatTableModule,
-        BookListComponent
+        BookListComponent,
+        BrowserAnimationsModule
       ],
       providers: [
         provideStore({

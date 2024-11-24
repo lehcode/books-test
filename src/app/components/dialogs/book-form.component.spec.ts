@@ -1,17 +1,16 @@
 import { CommonModule } from '@angular/common'
 import { HttpClient } from '@angular/common/http'
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { FormControl, FormGroup } from '@angular/forms'
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { provideStore, Store } from '@ngrx/store'
-import { Observable, of } from 'rxjs'
 
-import { Book } from '../../models/book.interface'
+import { updateBook } from '../../store/actions/books.actions'
 import { bookReducer } from '../../store/reducers/books.reducer'
-import { selectBooks } from '../../store/selectors/books.selectors'
 
-import { BookFormComponent } from './add-book.component'
+import { BookFormComponent } from './book-form.component'
 
 const dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close'])
 const dialogData = {
@@ -58,43 +57,50 @@ describe('BookFormComponent', () => {
     fixture.detectChanges();
     store = TestBed.inject(Store);
     httpClient = TestBed.inject(HttpClient);
+
+    component.bookForm = new FormGroup({
+      title: new FormControl(''),
+      authorFirstName: new FormControl(''),
+      authorLastName: new FormControl(''),
+      published: new FormControl(''),
+      description: new FormControl(''),
+      cover: new FormControl('')
+    });
   });
 
   afterEach(() => {
     httpTestingController.verify();
   });
 
-  xit('should add book to store', fakeAsync(async () => {
-    const book: Book = dialogData.book;
+  it('should dispatch updateBook action when editing an existing book', () => {
+    const mockFormValue = {
+      title: 'Test Book',
+      authorFirstName: 'Test',
+      authorLastName: 'Author',
+      published: 2022,
+      description: 'Test description',
+      cover: 'http://example.com/test-cover.jpg'
+    };
 
-    // Mock the POST request
-    spyOn(httpClient, 'post').and.callFake((url: string, body: any, options: any) => {
-      return of(book) as Observable<any>;
-    });
+    component.bookForm.patchValue(mockFormValue);
+    const storeSpy = spyOn(store, 'dispatch');
 
-    // Fill in the form
-    component.bookForm.get('title')?.setValue('Test Book');
-    component.bookForm.get('authorFirstName')?.setValue('Test');
-    component.bookForm.get('authorLastName')?.setValue('Author');
-    component.bookForm.get('published')?.setValue(2022);
-    component.bookForm.get('description')?.setValue('Test description');
-    component.bookForm.get('cover')?.setValue('http://example.com/test-cover.jpg');
+    component.onSubmit();
 
-    // Submit the form
-    component.onSubmit()
-    tick(100); // Allow the store to process the action
-
-    // Verify that the book was added to the store
-    await store.select(selectBooks).toPromise().then((books: any) => {
-      expect(books.length).toBe(1);
-      expect(books[0]).toEqual(jasmine.objectContaining({
-        id: book.id,
-        title: book.title,
-        author: book.author,
-        published: book.published,
-        description: book.description,
-        cover: book.cover,
-      }));
-    });
-  }));
+    expect(storeSpy).toHaveBeenCalledWith(updateBook({
+      book: {
+        id: 999,
+        title: mockFormValue.title,
+        author: {
+          id: 9989,
+          firstName: mockFormValue.authorFirstName,
+          lastName: mockFormValue.authorLastName
+        },
+        published: mockFormValue.published,
+        description: mockFormValue.description,
+        cover: mockFormValue.cover
+      }
+    }));
+    expect(dialogRefSpy.close).toHaveBeenCalledWith(true);
+  });
 })
