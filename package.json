@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "nx": "nx",
+    "nx": "npx nx",
     "start": "nx serve",
     "prebuild": "nx reset",
     "build": "nx build --configuration production",
