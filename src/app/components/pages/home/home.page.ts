@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, RouterOutlet,  RouterLink, RouterLinkActive],
   templateUrl: './home.page.html',
-  styleUrl: './home.page.scss',
+  styleUrl: './home.page.css',
 })
 export default class HomePage {
   title = 'librarian'
