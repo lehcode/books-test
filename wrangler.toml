@@ -2,6 +2,11 @@ name = "books-test"
 compatibility_date = "2024-11-24"
 pages_build_output_dir="dist/test-task/browser"
 
+[vars]
+NODE_VERSION="20.x"
+
 kv_namespaces = [
   { binding = "BOOKS_KV", id = "7cc55d9a2e1340eebbcf5df5ba3183b8" }
 ]
+
+
