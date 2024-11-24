@@ -10,7 +10,8 @@
     "build-cf": "nx build --configuration production",
     "watch": "nx build --watch --configuration development",
     "test": "nx test --configuration production --coverage",
-    "lint": "nx lint"
+    "lint": "nx lint",
+    "deploy": "wrangler pages deploy"
   },
   "private": true,
   "dependencies": {
