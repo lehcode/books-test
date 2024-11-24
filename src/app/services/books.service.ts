@@ -5,7 +5,7 @@ import { catchError } from "rxjs/operators"
 
 import { Book } from "../models/book.interface"
 
-const apiUrl = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:8788/api'
+const apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8788/api' : '/api'
 
 @Injectable({
   providedIn: 'root'
