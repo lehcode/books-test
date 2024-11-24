@@ -6,7 +6,7 @@ pages_build_output_dir="dist/test-task/browser"
 NODE_VERSION="20.x"
 
 kv_namespaces = [
-  { binding = "BOOKS_KV", id = "7cc55d9a2e1340eebbcf5df5ba3183b8" }
+  { binding = "BOOKS_KV", id = "fe860b63261f4b1f84307b099ec836d0" }
 ]
 
 

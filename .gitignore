@@ -41,5 +41,10 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# NX
 .nx/cache
 .nx/workspace-data
+
+# Cloudflare wrangler
+**/.wrangler/state
+**/.wrangler/tmp
