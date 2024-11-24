@@ -1,4 +1,4 @@
-import { MOCK_BOOKS } from '../src/mocks/book-mocks'
+import { MOCK_BOOKS } from '../../src/mocks/book-mocks'
 
 export const onRequest = async (context: { env: { BOOKS_KV: KVNamespace } }) => {
   const { env } = context
