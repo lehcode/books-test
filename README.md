@@ -2,6 +2,10 @@
 
 A modern Angular application for managing a book library, built with Angular 18, NgRx for state management, Angular Material for UI components, and TailwindCSS for styling.
 
+## Demo
+
+Deploys to [https://books-test.pages.dev](https://books-test.pages.dev) on push to `origin/main` repo branch.
+
 ## Features
 
 - Browse and search book collection
@@ -13,14 +17,22 @@ A modern Angular application for managing a book library, built with Angular 18,
 
 ## Tech Stack
 
-- Angular 18.2
-- NgRx 18.1
-- Angular Material 18.2
+- Angular
+- NgRx
+- RxJS
+- Angular Material
 - TailwindCSS
-- RxJS 7.8
 - Luxon for date handling
 - ESLint + Prettier for code quality
 - NX for build and development tools
+
+## Agenda
+
+- Books CRUD
+- Follows Angular style guide
+- Uses TailwindCSS utilities for styling
+- Implements strict TypeScript checks
+- Wrote base unit tests
 
 ## Getting Started
 
@@ -83,14 +95,6 @@ src/
 1. Create a feature branch from `main`
 2. Commit your changes following conventional commits
 3. Push your branch and open a pull request
-
-## Agenda
-
-- Books CRUD
-- Follows Angular style guide
-- Uses TailwindCSS utilities for styling
-- Implements strict TypeScript checks
-- Wrote base unit tests
 
 ## License
 
