@@ -11,11 +11,11 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Accept',
-    'Content-Security-Policy': "default-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src *; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;",
+    'Content-Security-Policy': "default-src *; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;",
     // 'Cross-Origin-Resource-Policy': 'cross-origin',
     // 'Cross-Origin-Embedder-Policy': 'require-corp',
     // 'Cross-Origin-Opener-Policy': 'same-origin',
-    // 'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Allow-Credentials': 'true',
   }
 
   // Handle CORS preflight requests
