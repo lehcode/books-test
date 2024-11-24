@@ -1,7 +1,6 @@
 name = "books-test"
 compatibility_date = "2024-11-24"
 pages_build_output_dir="dist/test-task/browser"
-requestTimeout = 90
 
 [vars]
 NODE_VERSION="20.x"
