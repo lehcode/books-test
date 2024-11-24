@@ -12,7 +12,7 @@ kv_namespaces = [
 
 # Routes configuration
 routes = [
-  { pattern = "/api/*", custom_domain = false },
-  { pattern = "/*", zone_name = "books-test.pages.dev", custom_domain = false }
+  { pattern = "/api/*" },
+  { pattern = "/*", zone_name = "pages.dev" }
 ]
 
