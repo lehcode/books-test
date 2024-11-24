@@ -11,7 +11,7 @@
     "watch": "nx build --watch --configuration development",
     "test": "nx test --configuration production --coverage",
     "lint": "nx lint",
-    "deploy": "wrangler pages deploy"
+    "deploy": "wrangler pages deploy --project-name books-test --upload-source-maps"
   },
   "private": true,
   "dependencies": {
@@ -55,7 +55,7 @@
     "@types/lodash-es": "^4.17.12",
     "@types/luxon": "^3.4.2",
     "angular-eslint": "18.4.0",
-    "eslint": "^8.57.0",
+    "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.1",
