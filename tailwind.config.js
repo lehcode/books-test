@@ -6,7 +6,7 @@ import colors from "tailwindcss/colors";
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 export default {
-  content: ["./index.html", "./src/**/*.{ts}"],
+  content: ["./index.html", "./src/**/*.ts"],
   darkMode: "selector",
   plugins: [typography, aspectRatio],
   theme: {
