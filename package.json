@@ -9,7 +9,7 @@
     "build": "nx build --configuration production",
     "build-cf": "nx build --configuration production",
     "watch": "nx build --watch --configuration development",
-    "test": "nx test --configuration production --coverage",
+    "test": "nx test --configuration production",
     "lint": "nx lint",
     "deploy": "wrangler pages deploy --project-name books-test --upload-source-maps"
   },
