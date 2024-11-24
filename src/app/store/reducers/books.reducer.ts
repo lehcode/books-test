@@ -1,4 +1,5 @@
 import { createReducer, on } from '@ngrx/store'
+
 import { Book } from '../../models/book.interface'
 import * as BookActions from '../actions/books.actions'
 
@@ -6,14 +7,14 @@ export interface IBooksState {
   books: Book[]
   loading: boolean
   error: string | null
-  searchQuery: string | null
+  searchQuery: string
 }
 
 const initialState: IBooksState = {
   books: [],
   loading: false,
   error: null,
-  searchQuery: null,
+  searchQuery: ''
 }
 
 export const bookReducer = createReducer(
@@ -73,4 +74,10 @@ export const bookReducer = createReducer(
     ...state,
     error
   })),
+
+  // Search
+  on(BookActions.setSearchQuery, (state, { query }) => ({
+    ...state,
+    searchQuery: query
+  }))
 )

@@ -6,7 +6,9 @@ import { MatIconModule } from '@angular/material/icon'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatTableModule } from '@angular/material/table'
 import { provideStore } from '@ngrx/store'
-import { bookReducer } from '../../store/reducers/books.reducers'
+
+import { bookReducer } from '../../store/reducers/books.reducer'
+
 import { BookListComponent } from './book-list.component'
 
 describe('BookListComponent', () => {

@@ -1,29 +1,25 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store'
-import { IBooksState } from '../reducers/books.reducers'
 
-export const selectBooksState = createFeatureSelector<IBooksState>('books')
+import { IBooksState } from '../reducers/books.reducer'
 
-export const selectBooks = createSelector(selectBooksState, (state: IBooksState) => state.books)
+export const selectBookState = createFeatureSelector<IBooksState>('books')
+export const selectBooks = createSelector(selectBookState, (state: IBooksState) => state.books)
+export const selectBooksLoading = createSelector(selectBookState, (state: IBooksState) => state.loading)
+export const selectBooksError = createSelector(selectBookState, (state: IBooksState) => state.error)
+export const selectSearchQuery = createSelector(selectBookState, (state: IBooksState) => state.searchQuery)
 
-export const selectBooksLoading = createSelector(selectBooksState, (state: IBooksState) => state.loading)
-
-export const selectBooksError = createSelector(selectBooksState, (state: IBooksState) => state.error)
-
-// Search selector
+// Filtered books
 export const selectFilteredBooks = createSelector(
   selectBooks,
-  (state: IBooksState) => state.searchQuery,
+  selectSearchQuery,
   (books, searchQuery) => {
-    if (!searchQuery) return books
+    if (!searchQuery) return books;
 
-    return books.filter(
-      (book) =>
-        book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        `${book.author.firstName} ${book.author.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
-  },
+    const query = searchQuery.toLowerCase();
+    return books.filter((book) =>
+      book.title.toLowerCase().includes(query) ||
+      `${book.author.firstName} ${book.author.lastName}`.toLowerCase().includes(query) ||
+      book.published.toString().includes(query)
+    );
+  }
 )
-
-// Single book selector
-export const selectBookById = (bookId: number) =>
-  createSelector(selectBooks, (books) => books.find((book) => book.id === bookId))

@@ -6,9 +6,11 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { provideStore, Store } from '@ngrx/store'
 import { Observable, of } from 'rxjs'
+
 import { Book } from '../../models/book.interface'
-import { bookReducer } from '../../store/reducers/books.reducers'
+import { bookReducer } from '../../store/reducers/books.reducer'
 import { selectBooks } from '../../store/selectors/books.selectors'
+
 import { BookFormComponent } from './add-book.component'
 
 const dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close'])
