@@ -4,18 +4,6 @@ export interface Env {
   BOOKS_KV: KVNamespace
 }
 
-  /**
-   * Handle HTTP requests for the /books endpoint.
-   *
-   * Supported methods:
-   * - GET: Returns a list of books
-   * - POST: Creates a new book
-   * - PUT: Updates an existing book
-   * - DELETE: Deletes a book
-   *
-   * @param context The context object provided by Cloudflare.
-   * @returns A Response object.
-   */
 export const onRequest = async (context: { request: Request; env: Env; params: any }) => {
   const { request, env } = context
 
@@ -23,11 +11,31 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
     'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
+    'Access-Control-Allow-Headers': 'Content-Type, Accept',
+    'Access-Control-Allow-Credentials': 'true',
   }
 
+  // Handle CORS preflight requests
   if (request.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
+  }
+
+  // Validate KV binding
+  if (!env?.BOOKS_KV) {
+    console.error('BOOKS_KV binding is not available:', env)
+    return new Response(
+      JSON.stringify({
+        error: 'Storage service is not available',
+        debug: {
+          env: JSON.stringify(env),
+          kvExists: !!env?.BOOKS_KV
+        }
+      }),
+      {
+        status: 500,
+        headers: corsHeaders
+      }
+    )
   }
 
   try {
@@ -37,13 +45,31 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
 
     switch (request.method) {
       case 'GET': {
-        const booksJson = await env.BOOKS_KV.get('books')
-        const books = booksJson ? JSON.parse(booksJson) : []
-        return new Response(JSON.stringify(books), { headers: corsHeaders })
+        try {
+          const booksJson = await env.BOOKS_KV.get('books')
+          if (!booksJson) {
+            // If no books exist, initialize with empty array
+            await env.BOOKS_KV.put('books', '[]')
+            return new Response('[]', { headers: corsHeaders })
+          }
+          return new Response(booksJson, { headers: corsHeaders })
+        } catch (kvError) {
+          console.error('KV operation failed:', kvError)
+          return new Response(
+            JSON.stringify({
+              error: 'Failed to retrieve books',
+              details: kvError.message
+            }),
+            {
+              status: 500,
+              headers: corsHeaders
+            }
+          )
+        }
       }
 
       case 'POST': {
-        const newBook: object = await request.json();
+        const newBook = await request.json()
         const booksJson = await env.BOOKS_KV.get('books')
         const books = booksJson ? JSON.parse(booksJson) : []
 
@@ -66,7 +92,7 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
           return new Response('Book ID required', { status: 400, headers: corsHeaders })
         }
 
-        const bookToUpdate: object = await request.json()
+        const bookToUpdate = await request.json()
         const booksJson = await env.BOOKS_KV.get('books')
         const books = booksJson ? JSON.parse(booksJson) : []
 
@@ -100,13 +126,23 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
       }
 
       default:
-        return new Response('Method not allowed', { status: 405, headers: corsHeaders })
+        return new Response('Method not allowed', {
+          status: 405,
+          headers: corsHeaders
+        })
     }
   } catch (error: any) {
     console.error('Error processing request:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: corsHeaders
-    })
+    return new Response(
+      JSON.stringify({
+        error: 'Internal server error',
+        details: error.message,
+        stack: error.stack
+      }),
+      {
+        status: 500,
+        headers: corsHeaders
+      }
+    )
   }
 }
