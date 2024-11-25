@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Store } from '@ngrx/store'
 import { of } from 'rxjs'
@@ -13,7 +13,7 @@ import * as BookActions from '../actions/books.actions'
 export class BooksEffects {
   constructor(
     private actions$: Actions,
-    @Inject('BooksService') private booksService: BooksService,
+    private booksService: BooksService,
     private store: Store
   ) {}
 
