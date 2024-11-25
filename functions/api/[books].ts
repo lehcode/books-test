@@ -24,6 +24,8 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
     })
   }
 
+  console.log("Env:", env)
+
   const kv = env?.BOOKS_KV || env?.BOOKS_KV_PROD
 
   // Validate KV binding
