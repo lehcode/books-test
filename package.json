@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "nx": "npx nx",
-    "start": "wrangler pages dev --kv BOOKS_KV",
+    "start": "wrangler pages dev dist/test-task/browser --kv BOOKS_KV",
     "prebuild": "nx reset",
     "build": "nx build --configuration production",
     "build-cf": "nx build --configuration production",
