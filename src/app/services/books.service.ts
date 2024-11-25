@@ -11,7 +11,7 @@ import { Book } from "../models/book.interface"
 @Injectable({
   providedIn: 'root'
 })
-export class BookService {
+export class BooksService {
   private apiUrl = `${environment.apiUrl}/books`
 
   constructor(private http: HttpClient) {}
