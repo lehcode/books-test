@@ -1,6 +1,8 @@
+import { Env } from "../interfaces/env.interface"
+
 export const onRequest = async (context: { env: Env }) => {
   const { env } = context
-  
+
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET',

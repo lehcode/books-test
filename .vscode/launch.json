@@ -3,18 +3,29 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "ng serve",
-      "type": "chrome",
+      "type": "node",
       "request": "launch",
-      "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/"
+      "name": "Debug Cloudflare Pages",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "../../../.nvm/versions/node/v20.15.1/bin/wrangler",
+      "args": ["pages", "dev", "--port", "8788", "--inspector-port", "9229"],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "integratedTerminal"
     },
     {
-      "name": "ng test",
       "type": "chrome",
       "request": "launch",
-      "preLaunchTask": "npm: test",
-      "url": "http://localhost:9876/debug.html"
+      "name": "Debug in Chrome",
+      "url": "http://localhost:8788",
+      "webRoot": "${workspaceFolder}"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Full Stack",
+      "configurations": ["Debug Cloudflare Pages", "Debug in Chrome"]
     }
   ]
 }

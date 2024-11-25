@@ -1,12 +1,11 @@
-import { KVNamespace } from '@cloudflare/workers-types'
-import { MOCK_BOOKS } from '../../src/mocks/book-mocks'
 
-interface Env {
-  BOOKS_KV: KVNamespace
-}
+import { MOCK_BOOKS } from '../../src/mocks/book-mocks'
+import { Env } from '../interfaces/env.interface'
 
 export const onRequest = async (context: { request: Request; env: Env; params: any }) => {
   const { request, env } = context
+
+  console.log(request);
 
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -44,6 +43,7 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
         }
       }), {
         status: 500,
+        statusText: 'Storage service configuration issue',
         headers: corsHeaders
       })
     }

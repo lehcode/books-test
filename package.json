@@ -4,14 +4,14 @@
   "scripts": {
     "ng": "ng",
     "nx": "npx nx",
-    "start": "nx serve",
+    "start": "wrangler pages dev --kv BOOKS_KV",
     "prebuild": "nx reset",
     "build": "nx build --configuration production",
     "build-cf": "nx build --configuration production",
     "watch": "nx build --watch --configuration development",
     "test": "nx test --configuration production",
     "lint": "nx lint",
-    "deploy": "wrangler pages deploy --project-name books-test --upload-source-maps"
+    "deploy": "wrangler pages deploy --project-name books-test"
   },
   "private": true,
   "dependencies": {
