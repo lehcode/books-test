@@ -68,7 +68,8 @@
               "with": "src/environments/environment.prod.ts"
             }
           ],
-          "sourceMap": false
+          "sourceMap": true,
+          "optimization": false
         },
         "development": {
           "optimization": false,
