@@ -10,11 +10,11 @@ import { provideStore } from '@ngrx/store'
 
 import { bookReducer } from '../../store/reducers/books.reducer'
 
-import { BookListComponent } from './book-list.component'
+import { BooksListComponent } from './books-list.component'
 
-describe('BookListComponent', () => {
-  let fixture: ComponentFixture<BookListComponent>;
-  let component: BookListComponent;
+describe('BooksListComponent', () => {
+  let fixture: ComponentFixture<BooksListComponent>;
+  let component: BooksListComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -25,7 +25,7 @@ describe('BookListComponent', () => {
         MatIconModule,
         MatProgressSpinnerModule,
         MatTableModule,
-        BookListComponent,
+        BooksListComponent,
         BrowserAnimationsModule
       ],
       providers: [
@@ -36,7 +36,7 @@ describe('BookListComponent', () => {
       declarations: []
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BookListComponent)
+    fixture = TestBed.createComponent(BooksListComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })
