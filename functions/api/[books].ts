@@ -4,6 +4,7 @@ import { corsHeaders as baseHeaders } from '../constants'
 
 export interface Env {
   BOOKS_KV: KVNamespace
+  BOOKS_KV_PROD?: KVNamespace
 }
 
 export const onRequest = async (context: { request: Request; env: Env; params: any }) => {
@@ -23,8 +24,10 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
     })
   }
 
+  const kv = env?.BOOKS_KV || env?.BOOKS_KV_PROD
+
   // Validate KV binding
-  if (!env?.BOOKS_KV) {
+  if (!kv) {
     console.error('BOOKS_KV binding is not available:', env)
     return new Response(
       JSON.stringify({
@@ -41,10 +44,6 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
   }
 
   try {
-    const url = new URL(request.url)
-    const pathSegments = url.pathname.split('/').filter(Boolean)
-    const id = pathSegments[pathSegments.length - 1]
-
     // Add Content-Type header for JSON responses
     const jsonHeaders = {
       ...corsHeaders,
