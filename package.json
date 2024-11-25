@@ -12,7 +12,7 @@
     "test": "nx test --configuration production",
     "lint": "nx lint",
     "predeploy": "yarn build-cf",
-    "deploy": "wrangler pages deploy --project-name books-test"
+    "deploy": "wrangler pages deploy --directory dist/test-task/browser --project-name books-test"
   },
   "private": true,
   "dependencies": {
