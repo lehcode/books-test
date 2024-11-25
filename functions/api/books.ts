@@ -1,6 +1,7 @@
 import { KVNamespace } from '@cloudflare/workers-types'
+import { MOCK_BOOKS } from '../../src/mocks/book-mocks'
 
-export interface Env {
+interface Env {
   BOOKS_KV: KVNamespace
 }
 
@@ -10,38 +11,43 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Accept',
-    'Content-Security-Policy': "default-src *; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;",
-    // 'Cross-Origin-Resource-Policy': 'cross-origin',
-    // 'Cross-Origin-Embedder-Policy': 'require-corp',
-    // 'Cross-Origin-Opener-Policy': 'same-origin',
-    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization',
+    'Access-Control-Max-Age': '86400', // 24 hours
+    'Content-Type': 'application/json'
   }
 
-  // Handle CORS preflight requests
+  // Enhanced CORS preflight handling
   if (request.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    return new Response(null, {
+      status: 204, // No content for OPTIONS
+      headers: corsHeaders
+    })
   }
 
-  // Validate KV binding
-  if (!env?.BOOKS_KV) {
-    console.error('BOOKS_KV binding is not available:', env)
-    return new Response(
-      JSON.stringify({
-        error: 'Storage service is not available',
-        debug: {
-          env: JSON.stringify(env),
-          kvExists: !!env?.BOOKS_KV,
-        },
-      }),
-      {
-        status: 500,
-        headers: corsHeaders,
-      },
-    )
-  }
+  // Debug logging
+  console.log('API Request:', {
+    method: request.method,
+    url: request.url,
+    hasKV: !!env?.BOOKS_KV
+  })
 
   try {
+    // Validate KV binding
+    if (!env?.BOOKS_KV) {
+      return new Response(JSON.stringify({
+        error: 'Storage service configuration issue',
+        debug: {
+          environment: process.env.NODE_ENV,
+          hasEnv: !!env,
+          envKeys: Object.keys(env || {}),
+          hasKV: !!env?.BOOKS_KV
+        }
+      }), {
+        status: 500,
+        headers: corsHeaders
+      })
+    }
+
     const url = new URL(request.url)
     const pathSegments = url.pathname.split('/').filter(Boolean)
     const id = pathSegments[pathSegments.length - 1]
@@ -52,101 +58,190 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
           const booksJson = await env.BOOKS_KV.get('books')
 
           if (!booksJson) {
-            await env.BOOKS_KV.put('books', '[]')
-            return new Response('[]', { headers: corsHeaders })
+            // Initialize with mock data if empty
+            await env.BOOKS_KV.put('books', JSON.stringify(MOCK_BOOKS))
+            return new Response(JSON.stringify(MOCK_BOOKS), {
+              headers: corsHeaders
+            })
           }
 
-          return new Response(booksJson, { headers: corsHeaders })
+          return new Response(booksJson, {
+            headers: corsHeaders
+          })
         } catch (kvError) {
-          console.error('KV operation failed:', kvError)
-          return new Response(
-            JSON.stringify({
-              error: 'Failed to retrieve books',
-              details: kvError.message,
-            }),
-            {
-              status: 500,
-              headers: corsHeaders,
-            },
-          )
+          console.error('KV Read Error:', kvError)
+          return new Response(JSON.stringify({
+            error: 'Failed to retrieve books',
+            details: kvError.message
+          }), {
+            status: 500,
+            headers: corsHeaders
+          })
         }
       }
 
       case 'POST': {
-        const newBook: object = await request.json()
-        const booksJson = await env.BOOKS_KV.get('books')
-        const books = booksJson ? JSON.parse(booksJson) : []
+        try {
+          const newBook = await request.json()
+          const booksJson = await env.BOOKS_KV.get('books')
+          const books = booksJson ? JSON.parse(booksJson) : []
 
-        const bookWithId = {
-          ...newBook,
-          id: Date.now(),
+          const bookWithId = {
+            ...newBook,
+            id: Date.now() // Simple ID generation
+          }
+
+          books.push(bookWithId)
+          await env.BOOKS_KV.put('books', JSON.stringify(books))
+
+          return new Response(JSON.stringify(bookWithId), {
+            status: 201,
+            headers: corsHeaders
+          })
+        } catch (error) {
+          console.error('POST Error:', error)
+          return new Response(JSON.stringify({
+            error: 'Failed to create book',
+            details: error.message
+          }), {
+            status: 500,
+            headers: corsHeaders
+          })
         }
-
-        books.push(bookWithId)
-        await env.BOOKS_KV.put('books', JSON.stringify(books))
-
-        return new Response(JSON.stringify(bookWithId), {
-          status: 201,
-          headers: corsHeaders,
-        })
       }
 
       case 'PUT': {
-        if (!id) {
-          return new Response('Book ID required', { status: 400, headers: corsHeaders })
+        try {
+          if (!id) {
+            return new Response(JSON.stringify({
+              error: 'Book ID is required'
+            }), {
+              status: 400,
+              headers: corsHeaders
+            })
+          }
+
+          const bookId = parseInt(id)
+          const updatedBook = await request.json()
+          const booksJson = await env.BOOKS_KV.get('books')
+
+          if (!booksJson) {
+            return new Response(JSON.stringify({
+              error: 'No books found'
+            }), {
+              status: 404,
+              headers: corsHeaders
+            })
+          }
+
+          const books = JSON.parse(booksJson)
+          const bookIndex = books.findIndex((book: any) => book.id === bookId)
+
+          if (bookIndex === -1) {
+            return new Response(JSON.stringify({
+              error: 'Book not found'
+            }), {
+              status: 404,
+              headers: corsHeaders
+            })
+          }
+
+          // Update the book while preserving its ID
+          books[bookIndex] = {
+            ...updatedBook,
+            id: bookId // Ensure ID remains unchanged
+          }
+
+          await env.BOOKS_KV.put('books', JSON.stringify(books))
+
+          return new Response(JSON.stringify(books[bookIndex]), {
+            status: 200,
+            headers: corsHeaders
+          })
+        } catch (error) {
+          console.error('PUT Error:', error)
+          return new Response(JSON.stringify({
+            error: 'Failed to update book',
+            details: error.message
+          }), {
+            status: 500,
+            headers: corsHeaders
+          })
         }
-
-        const bookToUpdate: object = await request.json()
-        const booksJson = await env.BOOKS_KV.get('books')
-        const books = booksJson ? JSON.parse(booksJson) : []
-
-        const updatedBooks = books.map((book: any) =>
-          book.id === parseInt(id) ? { ...bookToUpdate, id: parseInt(id) } : book,
-        )
-
-        await env.BOOKS_KV.put('books', JSON.stringify(updatedBooks))
-
-        return new Response(JSON.stringify(bookToUpdate), {
-          status: 200,
-          headers: corsHeaders,
-        })
       }
 
       case 'DELETE': {
-        if (!id) {
-          return new Response('Book ID required', { status: 400, headers: corsHeaders })
+        try {
+          if (!id) {
+            return new Response(JSON.stringify({
+              error: 'Book ID is required'
+            }), {
+              status: 400,
+              headers: corsHeaders
+            })
+          }
+
+          const bookId = parseInt(id)
+          const booksJson = await env.BOOKS_KV.get('books')
+
+          if (!booksJson) {
+            return new Response(JSON.stringify({
+              error: 'No books found'
+            }), {
+              status: 404,
+              headers: corsHeaders
+            })
+          }
+
+          const books = JSON.parse(booksJson)
+          const updatedBooks = books.filter((book: any) => book.id !== bookId)
+
+          if (books.length === updatedBooks.length) {
+            return new Response(JSON.stringify({
+              error: 'Book not found'
+            }), {
+              status: 404,
+              headers: corsHeaders
+            })
+          }
+
+          await env.BOOKS_KV.put('books', JSON.stringify(updatedBooks))
+
+          return new Response(null, {
+            status: 204, // No content for successful DELETE
+            headers: corsHeaders
+          })
+        } catch (error) {
+          console.error('DELETE Error:', error)
+          return new Response(JSON.stringify({
+            error: 'Failed to delete book',
+            details: error.message
+          }), {
+            status: 500,
+            headers: corsHeaders
+          })
         }
-
-        const booksJson = await env.BOOKS_KV.get('books')
-        const books = booksJson ? JSON.parse(booksJson) : []
-
-        const filteredBooks = books.filter((book: any) => book.id !== parseInt(id))
-        await env.BOOKS_KV.put('books', JSON.stringify(filteredBooks))
-
-        return new Response(null, {
-          status: 204,
-          headers: corsHeaders,
-        })
       }
 
       default:
-        return new Response('Method not allowed', {
-          status: 405,
-          headers: corsHeaders,
+        return new Response(null, {
+          status: 204, // No content for OPTIONS
+          headers: corsHeaders
         })
     }
   } catch (error: any) {
-    console.error('Error processing request:', error)
-    return new Response(
-      JSON.stringify({
-        error: 'Internal server error',
-        details: error.message,
-        stack: error.stack,
-      }),
-      {
-        status: 500,
-        headers: corsHeaders,
-      },
-    )
+    console.error('Request Processing Error:', error)
+    return new Response(JSON.stringify({
+      error: 'Internal server error',
+      details: error.message,
+      debug: {
+        errorType: error.name,
+        hasEnv: !!env,
+        hasKV: !!env?.BOOKS_KV
+      }
+    }), {
+      status: 500,
+      headers: corsHeaders
+    })
   }
 }
