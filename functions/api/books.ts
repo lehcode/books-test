@@ -4,7 +4,6 @@ import { corsHeaders as baseHeaders } from '../constants'
 
 export interface Env {
   BOOKS_KV: KVNamespace
-  BOOKS_KV_PROD?: KVNamespace
 }
 
 export const onRequest = async (context: { request: Request; env: Env; params: any }) => {
@@ -26,10 +25,8 @@ export const onRequest = async (context: { request: Request; env: Env; params: a
 
   console.log("Env:", env)
 
-  const kv = env?.BOOKS_KV || env?.BOOKS_KV_PROD
-
   // Validate KV binding
-  if (!kv) {
+  if (!env?.BOOKS_KV) {
     console.error('BOOKS_KV binding is not available:', env)
     return new Response(
       JSON.stringify({

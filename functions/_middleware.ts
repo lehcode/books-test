@@ -3,12 +3,12 @@ import { corsHeaders } from "./constants"
 export async function errorHandling(context) {
   try {
     // Log incoming request details
-    console.log('Incoming Request: _middleware.ts log', {
-      method: context.request.method,
-      url: context.request.url,
-      headers: Object.fromEntries(context.request.headers.entries()),
-      hasKV: !!context.env.BOOKS_KV
-    })
+    // console.log('Incoming Request: _middleware.ts log', {
+    //   method: context.request.method,
+    //   url: context.request.url,
+    //   headers: Object.fromEntries(context.request.headers.entries()),
+    //   hasKV: !!context.env.BOOKS_KV
+    // })
 
     const { request, env } = context
 

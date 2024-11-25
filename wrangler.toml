@@ -18,5 +18,5 @@ routes = [
 ]
 
 kv_namespaces = [
-  { binding = "BOOKS_KV_PROD", id = "7896ac1da1054e7ab311acc3e97c2760", preview_id = "7cc55d9a2e1340eebbcf5df5ba3183b8" }
+  { binding = "BOOKS_KV", id = "7896ac1da1054e7ab311acc3e97c2760", preview_id = "7cc55d9a2e1340eebbcf5df5ba3183b8" }
 ]
