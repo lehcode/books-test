@@ -22,7 +22,6 @@ Deploys to [https://books-test.pages.dev](https://books-test.pages.dev) on push 
 - RxJS
 - Angular Material
 - TailwindCSS
-- Luxon for date handling
 - ESLint + Prettier for code quality
 - NX for build and development tools
 
@@ -51,8 +50,10 @@ yarn install
 
 ### Development Server
 
+Uses [Wrangler](https://developers.cloudflare.com/workers/wrangler/) for Cloudflare development support.
+
 ```bash
-yarn serve
+yarn start
 ```
 
 Navigate to `http://localhost:4200/`.
@@ -85,16 +86,10 @@ src/
 
 ## Available Scripts
 
-- `yarn serve`: Start development server
+- `yarn start`: Start development server
 - `yarn build`: Build production version
 - `yarn test`: Run unit tests
 - `yarn lint`: Run linting checks
-
-## Contributing
-
-1. Create a feature branch from `main`
-2. Commit your changes following conventional commits
-3. Push your branch and open a pull request
 
 ## License
 
