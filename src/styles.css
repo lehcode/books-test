@@ -14,3 +14,18 @@ body {
 .mdc-notched-outline__notch{
   border-right: none !important;
 }
+
+.book-details-dialog .mat-mdc-dialog-container {
+  padding: 0;
+}
+
+.book-details-dialog .mat-mdc-dialog-surface {
+  background: transparent;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
